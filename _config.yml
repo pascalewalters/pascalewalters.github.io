@@ -1,0 +1,27 @@
+# Dependencies
+# markdown:         redcarpet
+# highlighter:      pygments
+plugins:          [jekyll-paginate]
+
+# Permalinks
+permalink:        pretty
+# relative_permalinks: true
+
+# Setup
+title:            pascale walters
+tagline:          'blog'
+description:      'A grad student just hanging in.'
+# url:              http://hyde.getpoole.com
+baseurl:          /
+
+author:
+  name:           'Pascale Walters'
+  # url:            https://twitter.com/mdo
+
+paginate:         2
+
+# Custom vars
+version:          1.0.0
+
+github:
+  repo:           https://github.com/poole/hyde
