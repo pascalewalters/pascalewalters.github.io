@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Regularization Techniques in Deep Learning &middot; pascale walters
+    
+  </title>
+
+  <!-- CSS -->
+  <!-- <link rel="stylesheet" href="//public/css/poole.css"> -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <!-- <link rel="stylesheet" href="//public/css/syntax.css"> -->
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <!-- <link rel="stylesheet" href="//public/css/hyde.css"> -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <!-- <link rel="stylesheet" href="//public/css/custom.css"> -->
+  <link rel="stylesheet" href="/public/css/custom.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {
+  inlineMath: [['$','$'], ['\\(','\\)']],
+  processEscapes: true},
+  jax: ["input/TeX","input/MathML","input/AsciiMath","output/CommonHTML"],
+  extensions: ["tex2jax.js","mml2jax.js","asciimath2jax.js","MathMenu.js","MathZoom.js","AssistiveMML.js", "[Contrib]/a11y/accessibility-menu.js"],
+  TeX: {
+  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+  equationNumbers: {
+  autoNumber: "AMS"
+  }
+  }
+  });
+  </script>
+
+  <!-- Icons -->
+  <!-- <link rel="apple-touch-icon-precomposed" sizes="144x144" href="//public/apple-touch-icon-144-precomposed.png"> -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico"">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body class="theme-base-0c">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          pascale walters
+        </a>
+      </h1>
+      <p class="lead">A grad student just hanging in.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">about</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+
+      <p class="sidebar-nav-item">
+        <a class="sidebar-nav-icons" href="mailto:pascalewalters@gmail.com" target="blank"><img src="/public/icons/email-icon.png" alt="Email" width="28" height="28"></a>
+        <!-- <a class="sidebar-nav-icons" href="https://github.com/pascalewalters" target="blank"><img src="/public/icons/github-icon.png" alt="Github" width="28" height="28"></a> -->
+        <a class="sidebar-nav-icons" href="https://github.com/pascalewalters" target="blank"><img src="/public/icons/github-icon.png" alt="Github" width="28" height="28"></a>
+        <!-- <a class="sidebar-nav-icons" href="https://www.instagram.com/pascale.walters/" target="blank"><img src="/public/icons/instagram-icon.png" alt="Instagram" width="28" height="28"></a> -->
+        <a class="sidebar-nav-icons" href="https://www.instagram.com/pascale.walters/" target="blank"><img src="/public/icons/instagram-icon.png" alt="Instagram" width="28" height="28"></a>
+        <!-- <a class="sidebar-nav-icons" href="https://www.linkedin.com/in/pascalewalters/" target="blank"><img src="/public/icons/linkedin-icon.png" alt="LinkedIn" width="28" height="28"></a> -->
+        <a class="sidebar-nav-icons" href="https://www.linkedin.com/in/pascalewalters/" target="blank"><img src="/public/icons/linkedin-icon.png" alt="LinkedIn" width="28" height="28"></a>
+        <!-- <a class="sidebar-nav-icons" href="https://scholar.google.com/citations?user=3KilEPoAAAAJ&hl=en" target="blank"><img src="/public/icons/scholar-icon.png" alt="Google Scholar" width="28" height="28"></a> -->
+        <a class="sidebar-nav-icons" href="https://scholar.google.com/citations?user=3KilEPoAAAAJ&hl=en" target="blank"><img src="/public/icons/scholar-icon.png" alt="Google Scholar" width="28" height="28"></a>
+        <!-- <a class="sidebar-nav-icons" href="https://www.strava.com/athletes/44815197" target="blank"><img src="/public/icons/strava-icon.png" alt="Strava" width="28" height="28"></a> -->
+        <a class="sidebar-nav-icons" href="https://www.strava.com/athletes/44815197" target="blank"><img src="/public/icons/strava-icon.png" alt="Strava" width="28" height="28"></a>
+      </p>
+    </nav>
+
+    <!-- <p>&copy; 2021. All rights reserved.</p> -->
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Regularization Techniques in Deep Learning</h1>
+  <span class="post-date">05 Jul 2020</span>
+  <p>In deep learning, the training process is important as it allows for a multi-parameter relationship between the input and the expected output to be learned. There are several techniques, in addition to the structure of the model itself, that have an effect on the accuracy and performance of the model. In this post, three papers will be explored that each present interesting ideas about learning. In one, a loss function is introduced for an application of semi-supervised deep learning that allows for training with minimal labelled data, but still obtains good results. In the second paper, non-convex regularization penalties are explored, with the hope that they would be able to reduce bias that arises from typical convex penalty functions. Finally, generalization in deep learning is explored, which includes an investigation into the role of regularization.</p>
+
+<h2 id="regularization-technique-for-semi-supervised-deep-learning">Regularization Technique for Semi-Supervised Deep Learning</h2>
+
+<p>Due to their high complexity, convolutional neural net- works (CNNs) are often used for computer vision tasks, as they are able to achieve state-of-the-art accuracy. With such a large number of parameters, there is a risk of overfitting with insufficiently large training datasets. Training data is difficult to obtain because it usually requires manual annotation. There is an interest in using unlabeled images for in semi- supervised techniques to get good accuracy without the need of hand labelling.</p>
+
+<p><a href="https://arxiv.org/abs/1606.04586">Sajjadi, Javanmardi and Tasdizen</a> propose two loss functions for use during semi-supervised training. A CNN model should make the same prediction for a given training sample, even if the sample has undergone a random transformation (e.g., linear or non-linear data augmentation), or the model has been perturbed (e.g., stochastic gradient descent, dropout, randomized pooling). The proposed loss functions enforce that predictions be the same, regardless of changes to the training sample or the model. The technique is unsupervised because the correct prediction does not need to be known.</p>
+
+<p>Assume a dataset of \( N \) training samples and \( C \) classes. \( \mathbf{f}^j(\mathbf{x}_i) \) is the classifier’s prediction vector on the \( i \)th training sample during the \( j \)th pass through the network and each training sample is passed \( n \) times through the network. \( T^j(\mathbf{x}_i) \) is a random transformation on \( \mathbf{x}_i \).
+The first loss function is for transformation stability and is as follows:</p>
+
+\[\begin{equation}
+\label{eq:1}
+l^{TS} = \sum_{i=1}^{N} \sum_{j=1}^{n-1} \sum_{k=j+1}^{n} 
+\| \mathbf{f}^{i}(T^j(\mathbf{x}_i)) - \mathbf{f}^k(T^k(\mathbf{x}_i)) \| _2^2
+\end{equation}\]
+
+<p>\( T^j \) produces a different input each pass through the network and the loss function attempts to minimize the sum of squared differences between each pair of predictions.</p>
+
+<p>The second loss function is for mutual exclusivity and is as follows:</p>
+
+\[\begin{equation}
+\label{eq:2}
+    l^{ME} = \sum_{i=1}^N \sum_{j=1}^n \left( -\sum_{k=1}^C f_k^j(\mathbf{x}_i)
+    \prod_{l=1, l \neq k}^C (1 - f_l^j(\textbf{x}_i))\right)
+\end{equation}\]
+
+<p>Where \( f_k^j(\mathbf{x}_i) \) is the \( k \)th element of prediction vector \( f^j(\mathbf{x}_i)\). Again, this loss function attempts to reduce the sum of squared difference between classifications due to perturbations in the model.</p>
+
+<p>It has been found that by using a weighted sum of the two loss functions in equations \eqref{eq:1} and \eqref{eq:2}, as in equation \eqref{eq:3} further improvements in accuracy can be obtained. The authors report that they were able to achieve the best results with \( \lambda_1 = 0.1 \) and \( \lambda_2 = 1 \). A close value to the state-of-the-art error rate is obtained on MNIST with only 100 labeled samples.</p>
+
+\[\begin{equation} \label{eq:3}
+    l = \lambda_1l^{ME} + \lambda_2l^{TS}
+\end{equation}\]
+
+<h2 id="deep-learning-with-non-convex-regularization">Deep Learning with Non-Convex Regularization</h2>
+
+<p>Regularization in deep learning is done to prevent overfitting of the model to the training data. The two most common methods are using the \( L_1 \) and \( L_2 \) penalties. Both of these are convex, which means that, during optimization, a local optima will always be a global optima.</p>
+
+<p>However, these two regularization methods can introduce bias into training. The use of \( L_1 \) sets many parameters to zero and the use of \( L_2 \) shrinks all parameters towards zero. Non-convex penalty functions may reduce this bias. It has also been recently shown that local optima from optimization of non-convex regularizers are as good as a global optima from a theoretical statistical perspective, since the distance from the global optima is not statistically significant.</p>
+
+<p><a href="https://arxiv.org/abs/1909.05142">Vettam and John</a> compare the performance of four non-convex regularization functions (Laplace (equation \eqref{eq:4}), Arctan (equation \eqref{eq:5}), SCAD and MCP), \( L_1 \), \( L_2 \), and training with no regularization penalty.</p>
+
+\[\begin{equation} \label{eq:4}
+    \sum_{j=1}^p p_{\theta}(w_i) = \lambda\sum_{j=1}^p(1-\epsilon^{|w_i|}), \theta = (\lambda,\epsilon), \epsilon \in (0,1), \lambda &gt;0
+\end{equation}\]
+
+\[\begin{equation} \label{eq:5}
+    \sum_{j=1}^p p_{\theta}(w_i) = \lambda\sum_{j=1}^p \frac{2}{\pi} \arctan(\gamma |w_i|), \theta = (\lambda,\gamma), \gamma &gt; 0, \lambda &gt;0
+\end{equation}\]
+
+<p>Training on the MNIST dataset gives comparable test errors for Arctan and Laplace as the convex penalties. There is no further exploration into the effects of bias on the results, so it is unknown whether these non-convex penalty functions actually have any advantages over convex functions.</p>
+
+<h2 id="understanding-generalization-in-deep-learning">Understanding Generalization in Deep Learning</h2>
+
+<p>In this <a href="https://arxiv.org/abs/1611.03530">paper by Zhang et al.</a>, the authors set out to understand generalization in deep learning. Despite deep networks having many more parameters than training samples, some are still able to have a small generalization error (the difference between training error and test error). It is also quite easy to train a network that generalizes poorly. It has been suggested that explicit and/or implicit regularization is needed to reduce generalization error.</p>
+
+<p>One of the main findings of the paper is that deep neural networks are easily able to learn and converge with random labels. It is possible to train on a randomly labelled dataset and obtain zero training error and a small increase in training time. Neural networks are also able to learn with input images that are just random noise. This shows that stochastic gradient descent is able to learn a relationship between the images and labels, even though no relationship exists.</p>
+
+<p>It is also not possible to explain the generalization error of a network based exclusively on explicit regularization (e.g., weight decay, dropout, and data augmentation). Including regularization during the training of a model improves performance, but models that have no regularization are still somewhat able to generalize. Testing was performed with the CIFAR10 and ImageNet datasets and Inception, Alexnet and MLPs as the deep neural networks. When regularization is properly tuned, generalization is improved, but it cannot fully explain the generalization.</p>
+
+<p>The authors propose that stochastic gradient descent (SGD) can also act as an implicit regularizer in linear models, as it will often converge to the solution with minimum norm.</p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>Three papers were explored in this report. For semi-supervised image classification tasks, a loss function that attempts to minimize the differences in model output between classes for different passes of the input through the model seems to improve performance. Non-convex penalty functions for regularization were able to obtain similar results to traditional convex penalty functions. These non-convex penalty functions are supposed to reduce the bias in the weights that typically arise with convex penalty functions. The role of regularizers for generalization is poorly understood, and models are still able to achieve some level of generalization, even without regularizers. These new and interesting ideas can be implemented when training and should be explored in further experiments.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2020/10/24/ta_video/">
+            Teaching Assistant Lab Prep Videos
+            <small>24 Oct 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/07/07/butterfly_transform/">
+            Reducing Computational Complexity in Neural Networks -  Butterfly Transform
+            <small>07 Jul 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/06/28/idk/">
+            runaway is the best kanye song of all time
+            <small>28 Jun 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

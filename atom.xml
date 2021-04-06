@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>pascale walters</title>
+ <link href="/atom.xml" rel="self"/>
+ <link href="/"/>
+ <updated>2021-04-06T15:44:48+00:00</updated>
+ <id></id>
+ <author>
+   <name>Pascale Walters</name>
+   <email></email>
+ </author>
+
+ 
+ <entry>
+   <title>Teaching Assistant Lab Prep Videos</title>
+   <link href="/2020/10/24/ta_video/"/>
+   <updated>2020-10-24T00:00:00+00:00</updated>
+   <id>/2020/10/24/ta_video</id>
+   <content type="html">&lt;p&gt;This term, I’m a teaching assistant for BME 121: Digital Computation. My role for this course, beyond office hours and assignment marking, has been making lab prep videos. Instead of tutorials this term, these lab prep videos are meant to provide the students with some coding examples that can hopefully help them with the lab activities.&lt;/p&gt;
+
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/q9tdg8L3qxw&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Reducing Computational Complexity in Neural Networks -  Butterfly Transform</title>
+   <link href="/2020/07/07/butterfly_transform/"/>
+   <updated>2020-07-07T00:00:00+00:00</updated>
+   <id>/2020/07/07/butterfly_transform</id>
+   <content type="html">&lt;p&gt;Convolutional neural networks (CNNs) have had much success in achieving state of the art results in various machine learning tasks.
+Their success is largely due to the high number of parameters that allow for the approximation of complex functions.
+The overparameterization of CNNs results in networks that are very large and have a high computational cost, measured by FLOPS (floating point operations per second).
+When running a CNN on a resource-constrained edge device, the size of the network needs to be minimized while maintaining a high performance.
+Butterfly matrices have been proposed as a method for improving the computational complexity of machine learning tasks.
+In this paper, three methods that use butterfly matrices will be explored.&lt;/p&gt;
+
+&lt;p&gt;The butterfly matrix is mostly known from its use in the Cooley-Tukey fast Fourier transform (FFT) algorithm.
+It is used to recursively break down a discrete Fourier transform into smaller transforms and recombines them with several butterfly transforms (Figure 1).&lt;/p&gt;
+
+&lt;figure class=&quot;image&quot;&gt;
+  &lt;img src=&quot;/public/2020-07-07-butterfly/FFT.png&quot; alt=&quot;Figure 1: Fast Fourier transform for N = 8 data points. FFT breaks down into two DFTs and recombines with butterfly operations.&quot; /&gt;
+  &lt;figcaption&gt;Figure 1: Fast Fourier transform for N = 8 data points. FFT breaks down into two DFTs and recombines with butterfly operations.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;The recursive nature of the factorization gives a series of matrices with a sparcity pattern. These matrices are called butterfly factors.&lt;/p&gt;
+
+&lt;p&gt;In this report, butterfly matrices are applied to deep learning to improve efficiency and accuracy.
+The butterfly transform can be used to replace pointwise convolution and achieve better performance.
+In addition, butterfly matrices are used to learn linear transforms and function representation.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-butterfly-transform&quot;&gt;The Butterfly Transform&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1906.02256&quot;&gt;Alizadeh, Farhadi and Rastegari&lt;/a&gt; have proposed the Butterfly Transform (BFT) that reduces the complexity of 1D convolution during channel fusion in CNNs. It has also been shown to increase the accuracy of the CNNs with FLOPS values.&lt;/p&gt;
+
+&lt;p&gt;To avoid overparameterization of CNNs and reduce their computational complexity, current efficient architectures factorize the convolutional layers using separable, depth-wise convolution. This means that convolution is performed separately in two components: spatial fusion and channel fusion. In channel fusion, the channels are linearly combined with  point-wise (1 \( \times \) 1) convolutions. These operations are relatively more computationally expensive than the channel fusion operations. It has been found that channel fusion has \( \mathcal{O}(n^2) \) complexity, where \( n \) is the number of channels.&lt;/p&gt;
+
+&lt;p&gt;Point-wise convolutions can be represented by matrix multiplication, which can be optimized by imposing structure on the transformation matrix. The authors prove that using an ideal transformation matrix has at least \( \mathcal{O}(n \log{} n) \) complexity. They propose a butterfly matrix as this ideal transformation matrix for spatial fusion.&lt;/p&gt;
+
+&lt;p&gt;Multiplication of a butterfly matrix and a vector recursively calculates the product with a divide-and-conquer approach. Figure 2 shows the BFT with \( k = 2 \) and Figure 3 shows the recursive nature of the transform with \( \log{} n \) butterfly layers.&lt;/p&gt;
+
+&lt;figure class=&quot;image&quot;&gt;
+  &lt;img src=&quot;/public/2020-07-07-butterfly/bft.png&quot; alt=&quot;Figure 2: Butterfly transform architecture with k = 2.&quot; /&gt;
+  &lt;figcaption&gt;Figure 2: Butterfly transform architecture with k = 2.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure class=&quot;image&quot;&gt;
+  &lt;img src=&quot;/public/2020-07-07-butterfly/bft_architecture.png&quot; alt=&quot;Figure 3: Expanded butterfly transform architecture with log n butterfly layers.&quot; /&gt;
+  &lt;figcaption&gt;Figure 3: Expanded butterfly transform architecture with log n butterfly layers.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;The complexity of each butterfly layer is  \( \mathcal{O}(n) \), thereby giving the architecture \( \mathcal{O}(n \log{} n) \) complexity. The butterfly network is an ideal fusion network, as it has one path between every input channel to all output channels (every-to-all connectivity), the bottleneck size is a maximum (size \( n \), the number of edges is a minimum (\( \mathcal{O}(n \log{} n) \) edges), and all nodes within a layer have the same degree.&lt;/p&gt;
+
+&lt;p&gt;To test the network, the authors replaced the point-wise convolution layers in several CNN architectures to determine effects on computational complexity and accuracy. First, image classification with MobileNet and ShuffleNet on ImageNet were tested. To ensure fair testing, the authors adjust the number of channels in the architecture to have the same number of FLOPS.&lt;/p&gt;
+
+&lt;p&gt;Replacing pointwise convolutions with BFT in MobileNetV1 results in an increase in top-1 accuracy at the same complexity. In addition, accuracies were compared between MobileNet and MobileNet + BFT at increasing FLOPS. It was found that MobileNet + BFT at 14 MFLOPS can achieve slightly higher performance as MobileNet at 21 MFLOPS. Similar results were reported with ShuffleNetV2.&lt;/p&gt;
+
+&lt;p&gt;The authors also compared performance of ShuffleNetV2 + BFT with state-of-the-art architecture search methods MNasNet and FBNet at an efficient network setting. They suggest including BFT as a searchable block in these models.&lt;/p&gt;
+
+&lt;p&gt;Finally, accuracy was higher with MobileNet + BFT than with MobileNet with other \( \mathcal{O}(n \log{} n) \) architectures for pointwise convolution (MobileNet + Circular and MobileNet + Low-Rank Matrix).&lt;/p&gt;
+
+&lt;p&gt;In the ablation studies, the effects of adding a non-linearity to the BFT layers were observed. Adding ReLU and sigmoid activation functions significantly reduces accuracy because some neurons will be assigned a value of zero, which cuts off information flow from the input to the output. Adding weight decay is also destructive as it also pushes weights to zero. Since the BFT network has only one path from the input to the output, these two methods significatly drop accuracy. Finally, it was found that adding residual connections within the BFT block increases accuracy. The BFT graphs can become deep, and accuracy is increased the most when the input of the first butterfly layer is connected to the last butterfly layer.&lt;/p&gt;
+
+&lt;p&gt;BFT has been proposed as a more efficient alternative for pointwise convolution. They also acknowledge that more gains are obtained with smaller networks than large ones. Since FFT is a common operation, optimized hardware platforms exist that can further speed up BFT.&lt;/p&gt;
+
+&lt;h2 id=&quot;butterfly-factorizations&quot;&gt;Butterfly Factorizations&lt;/h2&gt;
+
+&lt;p&gt;An application of butterfly matrices in machine learning was explored by &lt;a href=&quot;https://arxiv.org/abs/1903.05895&quot;&gt;Dao et al.&lt;/a&gt; They describe butterfly parameterization, a method for learning structured efficient linear transforms, rather than having to handcraft them. These transforms include FFT, discrete cosine transform and Hadamard transform.&lt;/p&gt;
+
+&lt;p&gt;Many discrete linear transforms can be represented as a product of sparse matrices that together model a recursive function. The butterfly factorization can be used for neural network compression, whereby fully connected layers are replaced by low rank maps. In this work, the \( 1 \times 1 \) layers in MobileNet are also replaced by butterfly matrices. They also achieve higher accuracy with fewer parameters on the CIFAR-10 dataset.&lt;/p&gt;
+
+&lt;h2 id=&quot;butterfly-net&quot;&gt;Butterfly-Net&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1805.07451&quot;&gt;Chang, Li and Lu&lt;/a&gt; propose a network architecture to perform function representation in the frequency domain based on the discrete Fourier transform, which uses butterfly matrices. It has a similar accuracy to CNNs, but with fewer parameters and more robustness.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;Butterfly matrices, inspired by their use in the Cooley-Tukey FFT, have been proposed as a way to increase computational efficiency and accuracy in deep neural networks while performing matrix multiplication. 
+In an image classification problem, replacing pointwise convolution with the butterfly transform in MobileNet and ShuffleNet gives higher accuracy with reduced FLOPS. Higher accuracy is also obtained than using efficient architecture search networks.
+In addition, butterfly matrices can be used for learning linear transforms and function representations.&lt;/p&gt;
+
+&lt;p&gt;Using butterfly matrices in deep neural networks appears to be a promising area for further research. Due to the popularity of the FFT algorithm, there exists software and hardware that can further accelerate butterfly algorithms.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Regularization Techniques in Deep Learning</title>
+   <link href="/2020/07/05/regularization/"/>
+   <updated>2020-07-05T00:00:00+00:00</updated>
+   <id>/2020/07/05/regularization</id>
+   <content type="html">&lt;p&gt;In deep learning, the training process is important as it allows for a multi-parameter relationship between the input and the expected output to be learned. There are several techniques, in addition to the structure of the model itself, that have an effect on the accuracy and performance of the model. In this post, three papers will be explored that each present interesting ideas about learning. In one, a loss function is introduced for an application of semi-supervised deep learning that allows for training with minimal labelled data, but still obtains good results. In the second paper, non-convex regularization penalties are explored, with the hope that they would be able to reduce bias that arises from typical convex penalty functions. Finally, generalization in deep learning is explored, which includes an investigation into the role of regularization.&lt;/p&gt;
+
+&lt;h2 id=&quot;regularization-technique-for-semi-supervised-deep-learning&quot;&gt;Regularization Technique for Semi-Supervised Deep Learning&lt;/h2&gt;
+
+&lt;p&gt;Due to their high complexity, convolutional neural net- works (CNNs) are often used for computer vision tasks, as they are able to achieve state-of-the-art accuracy. With such a large number of parameters, there is a risk of overfitting with insufficiently large training datasets. Training data is difficult to obtain because it usually requires manual annotation. There is an interest in using unlabeled images for in semi- supervised techniques to get good accuracy without the need of hand labelling.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1606.04586&quot;&gt;Sajjadi, Javanmardi and Tasdizen&lt;/a&gt; propose two loss functions for use during semi-supervised training. A CNN model should make the same prediction for a given training sample, even if the sample has undergone a random transformation (e.g., linear or non-linear data augmentation), or the model has been perturbed (e.g., stochastic gradient descent, dropout, randomized pooling). The proposed loss functions enforce that predictions be the same, regardless of changes to the training sample or the model. The technique is unsupervised because the correct prediction does not need to be known.&lt;/p&gt;
+
+&lt;p&gt;Assume a dataset of \( N \) training samples and \( C \) classes. \( \mathbf{f}^j(\mathbf{x}_i) \) is the classifier’s prediction vector on the \( i \)th training sample during the \( j \)th pass through the network and each training sample is passed \( n \) times through the network. \( T^j(\mathbf{x}_i) \) is a random transformation on \( \mathbf{x}_i \).
+The first loss function is for transformation stability and is as follows:&lt;/p&gt;
+
+\[\begin{equation}
+\label{eq:1}
+l^{TS} = \sum_{i=1}^{N} \sum_{j=1}^{n-1} \sum_{k=j+1}^{n} 
+\| \mathbf{f}^{i}(T^j(\mathbf{x}_i)) - \mathbf{f}^k(T^k(\mathbf{x}_i)) \| _2^2
+\end{equation}\]
+
+&lt;p&gt;\( T^j \) produces a different input each pass through the network and the loss function attempts to minimize the sum of squared differences between each pair of predictions.&lt;/p&gt;
+
+&lt;p&gt;The second loss function is for mutual exclusivity and is as follows:&lt;/p&gt;
+
+\[\begin{equation}
+\label{eq:2}
+    l^{ME} = \sum_{i=1}^N \sum_{j=1}^n \left( -\sum_{k=1}^C f_k^j(\mathbf{x}_i)
+    \prod_{l=1, l \neq k}^C (1 - f_l^j(\textbf{x}_i))\right)
+\end{equation}\]
+
+&lt;p&gt;Where \( f_k^j(\mathbf{x}_i) \) is the \( k \)th element of prediction vector \( f^j(\mathbf{x}_i)\). Again, this loss function attempts to reduce the sum of squared difference between classifications due to perturbations in the model.&lt;/p&gt;
+
+&lt;p&gt;It has been found that by using a weighted sum of the two loss functions in equations \eqref{eq:1} and \eqref{eq:2}, as in equation \eqref{eq:3} further improvements in accuracy can be obtained. The authors report that they were able to achieve the best results with \( \lambda_1 = 0.1 \) and \( \lambda_2 = 1 \). A close value to the state-of-the-art error rate is obtained on MNIST with only 100 labeled samples.&lt;/p&gt;
+
+\[\begin{equation} \label{eq:3}
+    l = \lambda_1l^{ME} + \lambda_2l^{TS}
+\end{equation}\]
+
+&lt;h2 id=&quot;deep-learning-with-non-convex-regularization&quot;&gt;Deep Learning with Non-Convex Regularization&lt;/h2&gt;
+
+&lt;p&gt;Regularization in deep learning is done to prevent overfitting of the model to the training data. The two most common methods are using the \( L_1 \) and \( L_2 \) penalties. Both of these are convex, which means that, during optimization, a local optima will always be a global optima.&lt;/p&gt;
+
+&lt;p&gt;However, these two regularization methods can introduce bias into training. The use of \( L_1 \) sets many parameters to zero and the use of \( L_2 \) shrinks all parameters towards zero. Non-convex penalty functions may reduce this bias. It has also been recently shown that local optima from optimization of non-convex regularizers are as good as a global optima from a theoretical statistical perspective, since the distance from the global optima is not statistically significant.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1909.05142&quot;&gt;Vettam and John&lt;/a&gt; compare the performance of four non-convex regularization functions (Laplace (equation \eqref{eq:4}), Arctan (equation \eqref{eq:5}), SCAD and MCP), \( L_1 \), \( L_2 \), and training with no regularization penalty.&lt;/p&gt;
+
+\[\begin{equation} \label{eq:4}
+    \sum_{j=1}^p p_{\theta}(w_i) = \lambda\sum_{j=1}^p(1-\epsilon^{|w_i|}), \theta = (\lambda,\epsilon), \epsilon \in (0,1), \lambda &amp;gt;0
+\end{equation}\]
+
+\[\begin{equation} \label{eq:5}
+    \sum_{j=1}^p p_{\theta}(w_i) = \lambda\sum_{j=1}^p \frac{2}{\pi} \arctan(\gamma |w_i|), \theta = (\lambda,\gamma), \gamma &amp;gt; 0, \lambda &amp;gt;0
+\end{equation}\]
+
+&lt;p&gt;Training on the MNIST dataset gives comparable test errors for Arctan and Laplace as the convex penalties. There is no further exploration into the effects of bias on the results, so it is unknown whether these non-convex penalty functions actually have any advantages over convex functions.&lt;/p&gt;
+
+&lt;h2 id=&quot;understanding-generalization-in-deep-learning&quot;&gt;Understanding Generalization in Deep Learning&lt;/h2&gt;
+
+&lt;p&gt;In this &lt;a href=&quot;https://arxiv.org/abs/1611.03530&quot;&gt;paper by Zhang et al.&lt;/a&gt;, the authors set out to understand generalization in deep learning. Despite deep networks having many more parameters than training samples, some are still able to have a small generalization error (the difference between training error and test error). It is also quite easy to train a network that generalizes poorly. It has been suggested that explicit and/or implicit regularization is needed to reduce generalization error.&lt;/p&gt;
+
+&lt;p&gt;One of the main findings of the paper is that deep neural networks are easily able to learn and converge with random labels. It is possible to train on a randomly labelled dataset and obtain zero training error and a small increase in training time. Neural networks are also able to learn with input images that are just random noise. This shows that stochastic gradient descent is able to learn a relationship between the images and labels, even though no relationship exists.&lt;/p&gt;
+
+&lt;p&gt;It is also not possible to explain the generalization error of a network based exclusively on explicit regularization (e.g., weight decay, dropout, and data augmentation). Including regularization during the training of a model improves performance, but models that have no regularization are still somewhat able to generalize. Testing was performed with the CIFAR10 and ImageNet datasets and Inception, Alexnet and MLPs as the deep neural networks. When regularization is properly tuned, generalization is improved, but it cannot fully explain the generalization.&lt;/p&gt;
+
+&lt;p&gt;The authors propose that stochastic gradient descent (SGD) can also act as an implicit regularizer in linear models, as it will often converge to the solution with minimum norm.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;Three papers were explored in this report. For semi-supervised image classification tasks, a loss function that attempts to minimize the differences in model output between classes for different passes of the input through the model seems to improve performance. Non-convex penalty functions for regularization were able to obtain similar results to traditional convex penalty functions. These non-convex penalty functions are supposed to reduce the bias in the weights that typically arise with convex penalty functions. The role of regularizers for generalization is poorly understood, and models are still able to achieve some level of generalization, even without regularizers. These new and interesting ideas can be implemented when training and should be explored in further experiments.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>runaway is the best kanye song of all time</title>
+   <link href="/2020/06/28/idk/"/>
+   <updated>2020-06-28T00:00:00+00:00</updated>
+   <id>/2020/06/28/idk</id>
+   <content type="html">&lt;p&gt;&lt;img src=&quot;/public/kanye.jpg&quot; alt=&quot;kanye&quot; /&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>idk</title>
+   <link href="/2020/06/27/idk/"/>
+   <updated>2020-06-27T00:00:00+00:00</updated>
+   <id>/2020/06/27/idk</id>
+   <content type="html">&lt;p&gt;:)&lt;/p&gt;
+</content>
+ </entry>
+ 
+
+</feed>
